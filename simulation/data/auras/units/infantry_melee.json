@@ -1,0 +1,12 @@
+{
+	"type": "range",
+	"radius": 3,
+	"affects": ["Soldier", "Siege"],
+	"affectedPlayers": ["Enemy"],
+	"modifications": [
+		{ "value": "UnitMotion/WalkSpeed", "multiply": 0.6 }
+	],
+	"auraName": "Friction",
+	"auraDescription": "Make battles less chaotic."
+}
+

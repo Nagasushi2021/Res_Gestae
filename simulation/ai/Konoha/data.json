@@ -1,0 +1,7 @@
+{
+  "name": "Konoha",
+  "description": "Konoha is experimental bot for 0AD based on petra bot, made by Nagasushi for mod testing. 'Balanced' is the recommended option.",
+  "moduleName" : "KONOHA",
+  "constructor": "KonohaBot",
+  "useShared": true
+}

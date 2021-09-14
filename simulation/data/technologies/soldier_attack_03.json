@@ -1,0 +1,31 @@
+{
+	"genericName": "Carburization",
+	"description": "By adding a small amount of carbon during the iron smelting process, a stronger material, steel, can be forged.",
+	"cost": {
+		"food": 400,
+		"wood": 600,
+		"metal": 800
+	},
+	"supersedes": "soldier_attack_02",
+	"requirements": {
+		"all": [
+			{ "tech": "phase_city" },
+			{ "notciv": "iber" },
+			{ "notciv": "maur" }
+		]
+	},
+	"requirementsTooltip": "Unlocked in City Phase.",
+	"icon": "sword_cross.png",
+	"researchTime": 60,
+	"tooltip": "Soldiers +22% attack damage.",
+	"modifications": [
+		{ "value": "Attack/Melee/Damage/Hack", "multiply": 1.22 },
+		{ "value": "Attack/Melee/Damage/Pierce", "multiply": 1.22 },
+		{ "value": "Attack/Melee/Damage/Crush", "multiply": 1.22 },
+                { "value": "Attack/Ranged/Damage/Hack", "multiply": 1.22 },
+		{ "value": "Attack/Ranged/Damage/Pierce", "multiply": 1.22 },
+		{ "value": "Attack/Ranged/Damage/Crush", "multiply": 1.22 }
+	],
+	"affects": ["Soldier !Elephant"],
+	"soundComplete": "interface/alarm/alarm_upgradearmory.xml"
+}

@@ -1,0 +1,32 @@
+{
+	"genericName": "Side Arms",
+	"specificName": {
+		"athen": "Xiphos",
+		"mace": "Xiphos",
+		"ptol": "Xiphos",
+		"rome": "Pugio",
+		"sele": "Xiphos",
+		"spart": "Xiphos"
+	},
+	"description": "Often, a soldier would carry a secondary weapon in addition to his primary weapon of choice, to be drawn when the primary weapon has failed or been broken.",
+	"cost": {
+		"food": 150,
+                "wood": 250,
+		"metal": 200
+	},
+	"requirements": { "tech": "phase_town" },
+	"requirementsTooltip": "Unlocked in Town Phase.",
+	"icon": "spear.png",
+	"researchTime": 40,
+	"tooltip": "Soldiers +10% attack damage.",
+	"modifications": [
+		{ "value": "Attack/Melee/Damage/Hack", "multiply": 1.1 },
+		{ "value": "Attack/Melee/Damage/Pierce", "multiply": 1.1 },
+		{ "value": "Attack/Melee/Damage/Crush", "multiply": 1.1 },
+                { "value": "Attack/Ranged/Damage/Hack", "multiply": 1.1 },
+		{ "value": "Attack/Ranged/Damage/Pierce", "multiply": 1.1 },
+		{ "value": "Attack/Ranged/Damage/Crush", "multiply": 1.1 }
+	],
+	"affects": ["Soldier !Elephant"],
+	"soundComplete": "interface/alarm/alarm_upgradearmory.xml"
+}

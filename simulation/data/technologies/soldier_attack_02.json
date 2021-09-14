@@ -1,0 +1,25 @@
+{
+	"genericName": "Iron Weapons",
+	"description": "Using iron instead of bronze gave weapons additional power.",
+	"cost": {
+		"food": 300,
+		"wood": 400,
+		"metal": 500
+	},
+	"supersedes": "soldier_attack_01",
+	"requirements": { "tech": "phase_city" },
+	"requirementsTooltip": "Unlocked in City Phase.",
+	"icon": "sword.png",
+	"researchTime": 50,
+	"tooltip": "Soldiers +10% attack damage.",
+	"modifications": [
+		{ "value": "Attack/Melee/Damage/Hack", "multiply": 1.1 },
+		{ "value": "Attack/Melee/Damage/Pierce", "multiply": 1.1 },
+		{ "value": "Attack/Melee/Damage/Crush", "multiply": 1.1 },
+                { "value": "Attack/Ranged/Damage/Hack", "multiply": 1.1 },
+		{ "value": "Attack/Ranged/Damage/Pierce", "multiply": 1.1 },
+		{ "value": "Attack/Ranged/Damage/Crush", "multiply": 1.1 }
+	],
+	"affects": ["Soldier !Elephant"],
+	"soundComplete": "interface/alarm/alarm_upgradearmory.xml"
+}
