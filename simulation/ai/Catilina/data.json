@@ -1,0 +1,7 @@
+{
+  "name": "Catilina",
+  "description": "Catilina is experimental bot for 0AD based on petra bot, made by Nagasushi for mod testing. 'Balanced' is the recommended option.",
+  "moduleName" : "CATILINA",
+  "constructor": "CatilinaBot",
+  "useShared": true
+}
