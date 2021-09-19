@@ -337,7 +337,7 @@ CATILINA.ResearchManager.prototype.update = function(gameState, queues)
  	{
  	 if (techName.increasePriority)
  		{
- 			gameState.ai.queueManager.changePriority("minorTech", 400*this.Config.priorities.minorTech);
+ 			gameState.ai.queueManager.changePriority("minorTech", 600*this.Config.priorities.minorTech);
  			let plan = new CATILINA.ResearchPlan(gameState, techName.name);
  			plan.queueToReset = "minorTech";
  			queues.minorTech.addPlan(plan);

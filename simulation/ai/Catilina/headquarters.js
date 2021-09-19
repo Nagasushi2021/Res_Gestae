@@ -703,7 +703,7 @@ CATILINA.HQ.prototype.trainMoreWorkers = function(gameState, queues)
   else
     alpha = 500;
 
-  supportNum = supportMax * (1 - Math.exp(-alpha*numberTotal/supportMax));
+  supportNum = supportMax * (1 - Math.exp(-alpha*(numberOfSupports + numberOfQueuedSupports)/supportMax));
 
 	let template;
 	if (!templateDef || numberOfSupports + numberOfQueuedSupports > supportNum)
@@ -737,7 +737,7 @@ CATILINA.HQ.prototype.findBestTrainableUnit = function(gameState, classes, requi
 		units = gameState.findTrainableUnits(classes, []);
 	// We do not want siege tower as AI does not know how to use it nor hero when not explicitely specified.
 	else
-		units = gameState.findTrainableUnits(classes, ["Hero", "SiegeTower"]);
+		units = gameState.findTrainableUnits(classes, ["Hero","SiegeTower"]);
 
 	if (!units.length)
 		return undefined;
@@ -2048,9 +2048,12 @@ CATILINA.HQ.prototype.constructTrainingBuildings = function(gameState, queues)
 
 	if (this.canBuild(gameState, "structures/{civ}/arsenal") && !gameState.getOwnEntitiesByClass("Arsenal", true).hasEntities())
 	{
-		queues.militaryBuilding.addPlan(new CATILINA.ConstructionPlan(gameState, "structures/{civ}/arsenal", { "militaryBase": true }));
-		return;
-	}
+    gameState.ai.queueManager.changePriority("militaryBuilding", 2 * this.Config.priorities.militaryBuilding);
+    let plan = new CATILINA.ConstructionPlan(gameState, "structures/{civ}/arsenal", { "militaryBase": true });
+    plan.queueToReset = "militaryBuilding";
+    queues.militaryBuilding.addPlan(plan);
+    return;
+	}	//Nagasuhi
 
 
   if (this.saveResources)
