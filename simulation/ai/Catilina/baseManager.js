@@ -340,7 +340,7 @@ CATILINA.BaseManager.prototype.findBestDropsiteLocation = function(gameState, re
 		if (total <= bestVal)
 			continue;
 
-		if (gameState.ai.HQ.isDangerousLocation(gameState, pos, halfSize))
+		if (gameState.ai.HQ.isDangerousLocation(gameState, pos, 50))
 			continue;
 		bestVal = total;
 		bestIdx = i;
@@ -929,10 +929,10 @@ CATILINA.BaseManager.prototype.assignToFoundations = function(gameState, noRepai
 		    gameState.getPopulationLimit() < gameState.getPopulationMax())
 			maxTotalBuilders += 4;
 		let targetNB = 2;
-		if (target.hasClasses(["Fortress", "Wonder","GovernmentCenter","ElephantStable","Arsenal"]) ||
+		if (target.hasClasses(["Fortress", "Wonder","GovernmentCenter"]) ||
 		    target.getMetadata(PlayerID, "phaseUp") == true)
 			targetNB = 20;//Nagasushi
-		else if (target.hasClasses(["Barracks", "Range", "Stable", "Tower", "Market"]))
+		else if (target.hasClasses(["Barracks", "Range", "Stable", "Tower", "Market","ElephantStable","Arsenal"]))
 			targetNB = 4;
 		else if (target.hasClasses(["House", "DropsiteWood"]))
 			targetNB = 3;

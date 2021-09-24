@@ -14,8 +14,8 @@ CATILINA.Config = function(difficulty, behavior)
 	this.popScaling = 1;	// scale factor depending on the max population
 
 	this.Military = {
-		"towerLapseTime": 900,	// Time to wait between building 2 towers
-		"fortressLapseTime": 3900,	// Time to wait between building 2 fortresses
+		"towerLapseTime": 180,	// Time to wait between building 2 towers
+		"fortressLapseTime": 600,	// Time to wait between building 2 fortresses
 		"popForBarracks1": 40,
 		"popForBarracks2": 72,
 		"popForForge": 120,
@@ -102,7 +102,7 @@ CATILINA.Config = function(difficulty, behavior)
 		"villager": 580,      // should be slightly lower than the citizen soldier one to not get all the food
 		"citizenSoldier": 570,
 		"trader": 1,
-		"healer": 20,
+		"healer": 1,
 		"ships": 70,
 		"house": 600,
 		"dropsites": 800,
@@ -111,7 +111,7 @@ CATILINA.Config = function(difficulty, behavior)
 		"corral": 1,
 		"economicBuilding": 200,
 		"militaryBuilding": 500,
-		"defenseBuilding": 1,
+		"defenseBuilding": 100,
 		"civilCentre": 1,
 		"majorTech": 150,
 		"minorTech": 1, //Large multipliers in researchManager.js
@@ -126,6 +126,9 @@ CATILINA.Config = function(difficulty, behavior)
 		"cooperative": 0.5,
 		"defensive": 0.5
 	};
+
+	// Nagasushi. New patience parameter, which determines when it should attack, and adjust building plans accordingly.
+	this.patience = randFloat(0.6, 1);
 
 	// See CATILINA.QueueManager.prototype.wantedGatherRates()
 	this.queues =
@@ -184,7 +187,7 @@ CATILINA.Config.prototype.setConfig = function(gameState)
 	// behavior="aggressive" => personality.aggressive > personalityCut.strong &&
 	//                          personality.defensive  < personalityCut.weak
 	// and inversely for behavior="defensive"
-	this.personalityCut = { "weak": 0.3, "medium": 0.52, "strong": 0.7 };
+	this.personalityCut = { "weak": 0.3, "medium": 0.53, "strong": 0.7 };
 
 	if (gameState.playerData.teamsLocked)
 		this.personality.cooperative = Math.min(1, this.personality.cooperative + 0.30);
@@ -227,6 +230,8 @@ CATILINA.Config.prototype.setConfig = function(gameState)
 			this.Economy.popPhase2 = 100;
 			this.priorities.healer = 10;
 		}
+
+		this.priorities.defenseBuilding *= this.patience;
 	}
 
 	let maxPop = gameState.getPopulationMax();
@@ -252,8 +257,8 @@ CATILINA.Config.prototype.setConfig = function(gameState)
 	this.Military.popForBarracks2 = Math.min(this.Military.popForBarracks2, Math.floor(maxPop*2/3));
 	this.Military.popForForge = Math.min(this.Military.popForForge, Math.floor(maxPop*2/3));
 	this.Economy.popPhase2 = Math.min(Math.max(Math.floor(this.Economy.popPhase2 * this.popScaling), 20), Math.floor(maxPop*2/3));
-	this.Economy.workPhase3 = Math.min(Math.max(Math.floor(this.Economy.workPhase3 * this.popScaling), 40), Math.floor(maxPop*3/4));
-	this.Economy.workPhase4 = Math.min(Math.max(Math.floor(this.Economy.workPhase4 * this.popScaling), 45), Math.floor(maxPop*4/5));
+	this.Economy.workPhase3 = Math.min(Math.max(Math.floor(this.Economy.workPhase3 * this.popScaling * (2 - this.patience)), 40), Math.floor(maxPop*4/5));
+	this.Economy.workPhase4 = Math.min(Math.max(Math.floor(this.Economy.workPhase4 * this.popScaling * (2 - this.patience)), 45), Math.floor(maxPop*5/6));
 	this.Economy.targetNumTraders = Math.round(this.Economy.targetNumTraders * this.popScaling);
 	/*this.Economy.targetNumWorkers = Math.max(this.Economy.targetNumWorkers, this.Economy.popPhase2);*/
 	this.Economy.workPhase3 = Math.min(this.Economy.workPhase3/*, this.Economy.targetNumWorkers*/); //Nagasushi

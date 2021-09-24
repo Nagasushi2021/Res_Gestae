@@ -152,7 +152,7 @@ CATILINA.ConstructionPlan.prototype.findGoodPosition = function(gameState)
 			}
 			return false;
 		}
-		else if (template.hasClasses(["Tower", "Fortress", "ArmyCamp"]))
+		else if (template.hasClasses(["Tower", "Fortress", "ArmyCamp", "Temple"]))//Nagasushi
 		{
 			let pos = HQ.findDefensiveLocation(gameState, template);
 			if (pos)
@@ -249,7 +249,17 @@ CATILINA.ConstructionPlan.prototype.findGoodPosition = function(gameState)
 			{
 				let value = placement.map[j] - gameState.sharedScript.resourceMaps.wood.map[j]/3;
 				if (HQ.borderMap.map[j] & CATILINA.fullBorder_Mask)
-					value /= 2;	// we need space around farmstead, so disfavor map border
+					value *= gameState.sharedScript.mapSize < 600 ? 1.1:0.5;	// we need space around farmstead, so disfavor map border //Nagasushi
+				placement.set(j, value);
+			}
+		}
+    else if (template.hasClasses(["Barracks", "Range", "Stable"]))
+		{
+			for (let j = 0; j < placement.map.length; ++j)
+			{
+				let value = placement.map[j] - gameState.sharedScript.resourceMaps.wood.map[j]/3;
+				if (HQ.borderMap.map[j] & CATILINA.fullBorder_Mask)
+					value *= gameState.sharedScript.mapSize < 600 ? 1:0.5;	// Let barracks disfavor map border //Nagasushi
 				placement.set(j, value);
 			}
 		}

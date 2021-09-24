@@ -1,0 +1,55 @@
+{
+	"TranslatedKeys": ["Title", "Tooltip"],
+	"Data":
+	[
+		{
+			"Difficulty": 1,
+			"Name": "1000-",
+			"Title": "1000-",
+			"Tooltip": "Choose this difficulty if you are discovering 0 A.D."
+		},
+		{
+			"Difficulty": 2,
+			"Name": "1000-1200",
+			"Title": "1000-1200",
+			"Tooltip": "Choose this difficulty if you do not like being knocked down."
+		},
+		{
+			"Difficulty": 3,
+			"Name": "1200-1300",
+			"Title": "1200-1300",
+			"Tooltip": "Choose this difficulty if you do not like being knocked down."
+		},
+		{
+			"Difficulty": 4,
+			"Name": "1300-1400 (Standard)",
+			"Title": "1300-1400 (Standard)",
+			"Tooltip": "Choose this difficulty if you have already a good experience with 0 A.D.",
+			"Default": true
+		},
+		{
+			"Difficulty": 5,
+			"Name": "1400-1500",
+			"Title": "1400-1500",
+			"Tooltip": "Choose this difficulty if you want to be really challenged."
+		},
+		{
+			"Difficulty": 6,
+			"Name": "1500-1600",
+			"Title": "1500-1600",
+			"Tooltip": "Choose this difficulty if you do not mind being swept out."
+		},
+		{
+			"Difficulty": 7,
+			"Name": "1600-1700",
+			"Title": "1600-1700",
+			"Tooltip": "Choose this difficulty if you do not mind being swept out."
+		},
+		{
+			"Difficulty": 8,
+			"Name": "1700-1800",
+			"Title": "1700-1800",
+			"Tooltip": "Choose this difficulty if you do not mind being swept out."
+		}
+	]
+}

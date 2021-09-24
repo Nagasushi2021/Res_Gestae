@@ -24,8 +24,8 @@ CATILINA.ResearchManager.prototype.checkPhase = function(gameState, queues)
 
 	let catilinaRequirements =
 		currentPhaseIndex == 1 && gameState.ai.HQ.getAccountedPopulation(gameState) >= this.Config.Economy.popPhase2 ||
-		currentPhaseIndex == 2 && gameState.ai.HQ.getAccountedWorkers(gameState) > this.Config.Economy.workPhase3 ||
-		currentPhaseIndex >= 3 && gameState.ai.HQ.getAccountedWorkers(gameState) > this.Config.Economy.workPhase4;
+		currentPhaseIndex == 2 && gameState.ai.HQ.getAccountedPopulation(gameState) > this.Config.Economy.workPhase3 ||
+		currentPhaseIndex >= 3 && gameState.ai.HQ.getAccountedPopulation(gameState) > this.Config.Economy.workPhase4;
 	if (catilinaRequirements && gameState.hasResearchers(nextPhaseName, true))
 	{
 		gameState.ai.HQ.phasing = currentPhaseIndex + 1;

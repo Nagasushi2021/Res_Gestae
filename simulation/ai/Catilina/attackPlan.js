@@ -138,9 +138,9 @@ CATILINA.AttackPlan = function(gameState, Config, uniqueID, type, data)
 	{
 		priority = 500;
 		// basically we want a mix of citizen soldiers so our barracks have a purpose, and champion units.
-		this.unitStat.RangedInfantry = { "priority": 1, "minSize": 40, "targetSize": 50, "batchSize": 5, "classes": ["Infantry+Ranged+CitizenSoldier"],
+		this.unitStat.RangedInfantry = { "priority": 1, "minSize": 40, "targetSize": 60, "batchSize": 5, "classes": ["Infantry+Ranged+CitizenSoldier"],
 			"interests": [["strength", 1],["canGather", 200]] };
-		this.unitStat.MeleeInfantry = { "priority": 1, "minSize": 60, "targetSize": 70, "batchSize": 5, "classes": ["Infantry+Melee+CitizenSoldier"],
+		this.unitStat.MeleeInfantry = { "priority": 1, "minSize": 60, "targetSize": 80, "batchSize": 5, "classes": ["Infantry+Melee+CitizenSoldier"],
 			"interests": [["strength", 1],["canGather", 200]] };
 		this.unitStat.ChampRangedInfantry = { "priority": 0.7, "minSize": 0, "targetSize": 10, "batchSize": 3, "classes": ["Infantry+Ranged+Champion"],
 			"interests": [["strength", 3]] };
@@ -180,9 +180,9 @@ CATILINA.AttackPlan = function(gameState, Config, uniqueID, type, data)
 	else
 	{
 		priority = 700;
-		this.unitStat.RangedInfantry = { "priority": 1, "minSize": 40, "targetSize": 60, "batchSize": 3, "classes": ["Infantry+Ranged"],
+		this.unitStat.RangedInfantry = { "priority": 1, "minSize": 40, "targetSize": 70, "batchSize": 3, "classes": ["Infantry+Ranged"],
 			"interests": [["strength", 1],["canGather", 200], ["costsResource", 0.3, "stone"], ["costsResource", 0.3, "metal"]] };
-		this.unitStat.MeleeInfantry = { "priority": 1, "minSize": 60, "targetSize": 80, "batchSize": 3, "classes": ["Infantry+Melee"],
+		this.unitStat.MeleeInfantry = { "priority": 1, "minSize": 60, "targetSize": 90, "batchSize": 3, "classes": ["Infantry+Melee"],
 			"interests": [["strength", 1],["canGather", 200], ["costsResource", 0.3, "stone"], ["costsResource", 0.3, "metal"]] };
 		this.unitStat.FastMoving = { "priority": 1, "minSize": 2, "targetSize": 6, "batchSize": 2, "classes": ["FastMoving+CitizenSoldier"],
 			"interests": [["strength", 1]] };
@@ -192,7 +192,7 @@ CATILINA.AttackPlan = function(gameState, Config, uniqueID, type, data)
 	}
 
 	// Put some randomness on the attack size
-	let variation = randFloat(0.9, 1.1);
+	let variation = this.Config.patience;
 	// and lower priority and smaller sizes for easier difficulty levels
 	if (this.Config.difficulty < 2)
 	{
@@ -207,7 +207,7 @@ CATILINA.AttackPlan = function(gameState, Config, uniqueID, type, data)
 
   else if (this.Config.difficulty >= 3)
   {
-    priority *= Math.sqrt(0.5 + this.Config.personality.aggressive)
+    priority *= Math.sqrt(0.5 + this.Config.personality.aggressive)* (1+gameState.ai.HQ.attackManager.attackNumber)
   }
 
 	if (this.Config.difficulty < 2)
@@ -220,12 +220,13 @@ CATILINA.AttackPlan = function(gameState, Config, uniqueID, type, data)
 		}
 	}
 	else
-	{
-		for (const cat in this.unitStat)
-		{
-			this.unitStat[cat].targetSize = Math.ceil(variation * this.unitStat[cat].targetSize);
-			this.unitStat[cat].minSize = Math.min(this.unitStat[cat].minSize, this.unitStat[cat].targetSize);
-		}
+	{ if (this.type != "Rush")
+		{ for (const cat in this.unitStat)
+		  {
+      	this.unitStat[cat].targetSize = Math.ceil(variation * this.unitStat[cat].targetSize);
+		  	this.unitStat[cat].minSize = Math.min(this.unitStat[cat].minSize, this.unitStat[cat].targetSize);
+		  }
+    }
 	}
 
 	// change the sizes according to max population
@@ -392,7 +393,7 @@ CATILINA.AttackPlan.prototype.addBuildOrder = function(gameState, name, unitStat
 
 CATILINA.AttackPlan.prototype.addSiegeUnits = function(gameState)
 {
-	if (this.siegeState == 2 || this.state !== "unexecuted")
+	if (this.siegeState == 2 /*|| this.state !== "unexecuted"*/)
 		return false;
 
 	let civ = gameState.getPlayerCiv();
@@ -430,7 +431,7 @@ CATILINA.AttackPlan.prototype.addSiegeUnits = function(gameState)
 	if (this.Config.difficulty < 3)
 		targetSize = this.type == "HugeAttack" ? Math.max(this.Config.difficulty, 1) : Math.max(this.Config.difficulty - 1, 0);
 	else
-		targetSize = this.type == "HugeAttack" ? 4 : 3;
+		targetSize = this.type == "HugeAttack" ? 3 : 2;
 	targetSize = Math.max(Math.round(this.Config.popScaling * targetSize), this.type == "HugeAttack" ? 2 : 1);
 	if (!targetSize)
 		return true;
@@ -942,8 +943,10 @@ CATILINA.AttackPlan.prototype.getNearestTarget = function(gameState, position, s
 			continue;
 		let dist = API3.SquareVectorDistance(ent.position(), position);
 		// In normal attacks, disfavor fields
-		if (this.type != "Rush" && this.type != "Raid" && ent.hasClass("Field"))
+		if (/*this.type != "Rush" && */this.type != "Raid" && ent.hasClass("Field"))
 			dist += 100000;
+    if (this.type == "Rush" && ent.hasClass("FemaleCitizen"))
+      dist -= 200; //Nagasuhi
 		if (dist < minDist)
 		{
 			minDist = dist;
@@ -1342,15 +1345,15 @@ CATILINA.AttackPlan.prototype.update = function(gameState, events)
 			ent.stopMoving();
 			ent.setMetadata(PlayerID, "subrole", "attacking");
 		});
-		if (this.type == "Rush")   // try to find a better target for rush
-		{
+	/*	if (this.type == "Rush")   // try to find a better target for rush
+		{*/
 			let newtarget = this.getNearestTarget(gameState, this.position);
 			if (newtarget)
 			{
 				this.target = newtarget;
 				this.targetPos = this.target.position();
 			}
-		}
+	/*	}*/
 	}
 
 	// basic state of attacking.
@@ -1441,11 +1444,11 @@ CATILINA.AttackPlan.prototype.update = function(gameState, events)
 				else
 				{
 					// Look first for nearby units to help us if possible
-					let collec = this.unitCollection.filterNearest(ourUnit.position(), 2);
+					let collec = this.unitCollection.filterNearest(ourUnit.position(), 130);//Nagasushi
 					for (let ent of collec.values())
 					{
 						let allowCapture = CATILINA.allowCapture(gameState, ent, attacker);
-						if (CATILINA.isSiegeUnit(ent) || !ent.canAttackTarget(attacker, allowCapture))
+						if (CATILINA.isSiegeUnit(ent) || !ent.canAttackTarget(attacker, allowCapture) /*|| ent.getMetadata(PlayerID, "subrole") == "attacking"*/)
 							continue;
 						let orderData = ent.unitAIOrderData();
 						if (orderData && orderData.length && orderData[0].target)

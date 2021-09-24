@@ -259,7 +259,7 @@ CATILINA.Worker.prototype.update = function(gameState, ent)
 				{
 					// Check from time to time that UnitAI does not send us to an inaccessible dropsite
 					let dropsite = gameState.getEntityById(ent.unitAIOrderData()[0].target);
-					if (dropsite && dropsite.position() && this.entAccess != CATILINA.getLandAccess(gameState, dropsite))
+					if (dropsite && !gameState.ai.HQ.isDangerousLocation(gameState, dropsite.position(), 50) && this.entAccess != CATILINA.getLandAccess(gameState, dropsite))
 						CATILINA.returnResources(gameState, this.ent);
 				}
 

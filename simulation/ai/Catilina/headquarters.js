@@ -1291,7 +1291,7 @@ CATILINA.HQ.prototype.findMarketLocation = function(gameState, template)
 		return [-1, -1, -1, 0];
 
 	// No need for more than one market when we cannot trade.
-	if (!Resources.GetTradableCodes().length)
+	/*if (!Resources.GetTradableCodes().length)*/
 		return false; //Nagasushi
 
 	// obstruction map
@@ -1853,6 +1853,13 @@ CATILINA.HQ.prototype.buildDefenses = function(gameState, queues)
 	if (this.saveResources && !this.canBarter || queues.defenseBuilding.hasQueuedUnits())
 		return;
 
+  let mapSize = gameState.sharedScript.mapSize;
+  if (mapSize < 600)
+    {this.Config.Military.numSentryTowers = 2;
+     this.Config.priorities.defenseBuilding = 400;
+     this.towerLapseTime = 20;
+    }//Nagasushi
+
 	if (!this.saveResources && (this.currentPhase > 2 || gameState.isResearching(gameState.getPhaseName(3))))
 	{
 		// Try to build fortresses.
@@ -1993,6 +2000,15 @@ CATILINA.HQ.prototype.constructTrainingBuildings = function(gameState, queues)
 			queues.militaryBuilding.addPlan(new CATILINA.ConstructionPlan(gameState, stableTemplate, { "militaryBase": true }));
 			return;
 		}*/
+    if (this.canBuild(gameState, "structures/{civ}/arsenal") && !gameState.getOwnEntitiesByClass("Arsenal", true).hasEntities()
+  && this.getAccountedPopulation(gameState) > this.Config.Military.popForBarracks2 + 20* this.Config.patience)
+    {
+      gameState.ai.queueManager.changePriority("militaryBuilding", 2 * this.Config.priorities.militaryBuilding);
+      let plan = new CATILINA.ConstructionPlan(gameState, "structures/{civ}/arsenal", { "militaryBase": true });
+      plan.queueToReset = "militaryBuilding";
+      queues.militaryBuilding.addPlan(plan);
+      return;
+    }	//Nagasushi
 
 		// Third barracks/range and stable, if needed.
 		if (numBarracks + numRanges + numStables == 2 && this.getAccountedPopulation(gameState) > this.Config.Military.popForBarracks2 + 40)
@@ -2037,23 +2053,14 @@ CATILINA.HQ.prototype.constructTrainingBuildings = function(gameState, queues)
 		}
 	}
 
-	if (this.currentPhase < 3)
-		return;
-
 	if (this.canBuild(gameState, "structures/{civ}/elephant_stable") && !gameState.getOwnEntitiesByClass("ElephantStable", true).hasEntities())
 	{
 		queues.militaryBuilding.addPlan(new CATILINA.ConstructionPlan(gameState, "structures/{civ}/elephant_stable", { "militaryBase": true }));
 		return;
 	}
 
-	if (this.canBuild(gameState, "structures/{civ}/arsenal") && !gameState.getOwnEntitiesByClass("Arsenal", true).hasEntities())
-	{
-    gameState.ai.queueManager.changePriority("militaryBuilding", 2 * this.Config.priorities.militaryBuilding);
-    let plan = new CATILINA.ConstructionPlan(gameState, "structures/{civ}/arsenal", { "militaryBase": true });
-    plan.queueToReset = "militaryBuilding";
-    queues.militaryBuilding.addPlan(plan);
+  if (this.currentPhase < 3)
     return;
-	}	//Nagasuhi
 
 
   if (this.saveResources)

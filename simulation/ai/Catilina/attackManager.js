@@ -499,12 +499,26 @@ CATILINA.AttackManager.prototype.getEnemyPlayer = function(gameState, attack)
 			if (this.defeated[i])
 				continue;
 			let enemyDefense = 0;
-			for (let ent of gameState.getEnemyStructures(i).values())
-				if (ent.hasClasses(["Tower", "WallTower", "Fortress"]))
-					enemyDefense++;
-			if (enemyDefense > 6)
-				veto[i] = true;
-		}
+			let enemyUnits = gameState.getEnemyUnits(i).values()
+			let enemyUnitSize = enemyUnits.length;
+	    let suports = 0;
+			let ownsoldiers = gameState.getOwnEntitiesByClass("Soldier", true).length
+				for (let ent of enemyUnits) {
+					if (ent.hasClass("Support"))
+						++suports;
+					}
+						if (enemyUnitSize - suports > ownsoldiers + 10 || suports / enemyUnitSize < 0.2) {
+							{veto[i] = true;
+							 this.maxRushes = 0;
+						  }
+							continue;
+					}
+						for (let ent of gameState.getEnemyStructures(i).values())
+							if (ent.hasClass("Tower") /*|| ent.hasClass("WallTower")*/ || ent.hasClass("Fortress"))
+								enemyDefense++;
+						if (enemyDefense > 3)
+						  veto[i] = true;
+					}
 	}
 
 	// then if not a huge attack, continue attacking our previous target as long as it has some entities,

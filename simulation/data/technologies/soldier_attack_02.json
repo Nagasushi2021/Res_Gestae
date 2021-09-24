@@ -2,9 +2,9 @@
 	"genericName": "Iron Weapons",
 	"description": "Using iron instead of bronze gave weapons additional power.",
 	"cost": {
-		"food": 300,
-		"wood": 400,
-		"metal": 500
+		"food": 200,
+		"wood": 250,
+		"metal": 350
 	},
 	"supersedes": "soldier_attack_01",
 	"requirements": { "tech": "phase_city" },
